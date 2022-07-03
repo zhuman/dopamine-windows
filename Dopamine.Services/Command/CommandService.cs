@@ -1,4 +1,5 @@
-﻿using Dopamine.Core.Prism;
+﻿using CoreWCF;
+using Dopamine.Core.Prism;
 using Dopamine.Services.Command;
 using System.ServiceModel;
 

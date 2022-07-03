@@ -1,4 +1,5 @@
-﻿using Dopamine.Services.Entities;
+﻿using CoreWCF;
+using Dopamine.Services.Entities;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;

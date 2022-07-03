@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using CoreWCF;
+using System.ServiceModel;
 using System.Threading.Tasks;
 
 namespace Dopamine.Services.ExternalControl

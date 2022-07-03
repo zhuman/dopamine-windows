@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using CoreWCF;
+using System.ServiceModel;
 
 namespace Dopamine.Services.Command
 {
