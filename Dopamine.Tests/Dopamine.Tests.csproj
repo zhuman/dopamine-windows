@@ -140,9 +140,18 @@
     <Content Include="Files\PlaylistDecoder\Test.m3u8">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="CommonServiceLocator">
+      <Version>2.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="DiscordRichPresence">
+      <Version>1.0.175</Version>
+    </PackageReference>
+    <PackageReference Include="taglib">
+      <Version>2.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Files\PlaylistDecoder\Test.m3u">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
