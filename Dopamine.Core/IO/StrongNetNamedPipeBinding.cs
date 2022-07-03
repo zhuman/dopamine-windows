@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace Dopamine.Core.IO
 {
-    public class StrongNetNamedPipeBinding : NetNamedPipeBinding
+    /*public class StrongNetNamedPipeBinding : NetNamedPipeBinding
     {
         public StrongNetNamedPipeBinding() : base(NetNamedPipeSecurityMode.None)
         {
@@ -25,5 +25,5 @@ namespace Dopamine.Core.IO
             this.MaxBufferSize = 2000000000;
             this.ReaderQuotas = bindingReaderQuotas;
         }
-    }
+    }*/
 }

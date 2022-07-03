@@ -1,14 +1,15 @@
-﻿using Digimezzo.Foundation.Core.Settings;
+﻿using CoreWCF;
+using CoreWCF.Description;
+using Digimezzo.Foundation.Core.Settings;
 using Dopamine.Core.Base;
 using Dopamine.Services.Cache;
 using Dopamine.Services.Playback;
 using System;
 using System.ServiceModel;
-using System.ServiceModel.Description;
 
 namespace Dopamine.Services.ExternalControl
 {
-    public class ExternalControlService : IExternalControlService
+    /*public class ExternalControlService : IExternalControlService
     {
         private ServiceHost svcHost;
         private ExternalControlServer svcExternalControlInstance;
@@ -67,5 +68,5 @@ namespace Dopamine.Services.ExternalControl
             this.svcHost.Close();
             this.svcExternalControlInstance.Close();
         }
-    }
+    }*/
 }
