@@ -2,7 +2,7 @@
 using Dopamine.Utils;
 using Dopamine.Core.Prism;
 using Dopamine.Services.Playback;
-using CommonServiceLocator;
+using Prism.Ioc;
 using Prism.Events;
 using System;
 using System.Windows;
@@ -24,8 +24,8 @@ namespace Dopamine.Views.Common
         {
             InitializeComponent();
 
-            this.playbackService = ServiceLocator.Current.GetInstance<IPlaybackService>();
-            this.eventAggregator = ServiceLocator.Current.GetInstance<IEventAggregator>();
+            this.playbackService = ContainerLocator.Current.Resolve<IPlaybackService>();
+            this.eventAggregator = ContainerLocator.Current.Resolve<IEventAggregator>();
             this.eventAggregator.GetEvent<ScrollToHighlightedLyricsLine>().Subscribe((_) => this.ScrollToHighlightedLyricsLineAsync());
         }
     

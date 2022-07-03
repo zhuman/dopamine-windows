@@ -1,7 +1,7 @@
 ﻿using Dopamine.Core.Utils;
 using Dopamine.Services.Playback;
-using CommonServiceLocator;
 using System;
+using Prism.Ioc;
 
 namespace Dopamine.ViewModels.Common
 {
@@ -22,7 +22,7 @@ namespace Dopamine.ViewModels.Common
             set { SetProperty<string>(ref this.totalTime, value); }
         }
   
-        public ProgressControlsWithTimeViewModel() : base(ServiceLocator.Current.GetInstance<IPlaybackService>())
+        public ProgressControlsWithTimeViewModel() : base(ContainerLocator.Current.Resolve<IPlaybackService>())
         {
             this.CurrentTime = FormatUtils.FormatTime(new TimeSpan(0));
             this.TotalTime = FormatUtils.FormatTime(new TimeSpan(0));

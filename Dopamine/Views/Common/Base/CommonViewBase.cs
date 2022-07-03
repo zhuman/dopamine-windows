@@ -1,5 +1,4 @@
 ﻿using Dopamine.Services.Playback;
-using CommonServiceLocator;
 using Prism.Commands;
 using Prism.Events;
 using System;
@@ -7,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Prism.Ioc;
 
 namespace Dopamine.Views.Common.Base
 {
@@ -22,8 +22,8 @@ namespace Dopamine.Views.Common.Base
         {
             // We need a parameterless constructor to be able to use this UserControl in other UserControls without dependency injection.
             // So for now there is no better solution than to find the EventAggregator by using the ServiceLocator.
-            this.eventAggregator = ServiceLocator.Current.GetInstance<IEventAggregator>();
-            this.playbackService = ServiceLocator.Current.GetInstance<IPlaybackService>();
+            this.eventAggregator = ContainerLocator.Current.Resolve<IEventAggregator>();
+            this.playbackService = ContainerLocator.Current.Resolve<IPlaybackService>();
         }
      
         protected abstract Task KeyUpHandlerAsync(object sender, KeyEventArgs e);

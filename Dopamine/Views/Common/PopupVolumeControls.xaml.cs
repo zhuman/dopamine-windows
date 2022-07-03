@@ -1,4 +1,4 @@
-﻿using CommonServiceLocator;
+﻿using Prism.Ioc;
 using Digimezzo.Foundation.Core.Logging;
 using Dopamine.Services.Playback;
 using Dopamine.Views.Base;
@@ -30,7 +30,7 @@ namespace Dopamine.Views.Common
 
             // We need a parameterless constructor to be able to use this UserControl in other UserControls without dependency injection.
             // So for now there is no better solution than to find the EventAggregator by using the ServiceLocator.
-            this.playBackService = ServiceLocator.Current.GetInstance<IPlaybackService>();
+            this.playBackService = ContainerLocator.Current.Resolve<IPlaybackService>();
 
             this.playBackService.PlaybackVolumeChanged += (_, e) =>
             {

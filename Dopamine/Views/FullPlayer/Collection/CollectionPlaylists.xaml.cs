@@ -1,4 +1,4 @@
-﻿using CommonServiceLocator;
+﻿using Prism.Ioc;
 using Digimezzo.Foundation.Core.IO;
 using Digimezzo.Foundation.Core.Logging;
 using Dopamine.Core.Prism;
@@ -25,7 +25,7 @@ namespace Dopamine.Views.FullPlayer.Collection
 
             // We need a parameterless constructor to be able to use this UserControl in other UserControls without dependency injection.
             // So for now there is no better solution than to find the EventAggregator by using the ServiceLocator.
-            this.playlistService = ServiceLocator.Current.GetInstance<IPlaylistService>();
+            this.playlistService = ContainerLocator.Current.Resolve<IPlaylistService>();
 
             // Commands
             this.ViewPlaylistInExplorerCommand = new DelegateCommand(() => this.ViewPlaylistInExplorer(this.ListBoxPlaylists));

@@ -1,4 +1,4 @@
-﻿using CommonServiceLocator;
+﻿using Prism.Ioc;
 using Digimezzo.Foundation.Core.Settings;
 using Dopamine.Core.Enums;
 using Dopamine.Core.Helpers;
@@ -24,8 +24,8 @@ namespace Dopamine.Views.Common
         {
             InitializeComponent();
 
-            this.playbackService = ServiceLocator.Current.GetInstance<IPlaybackService>();
-            this.shellService = ServiceLocator.Current.GetInstance<IShellService>();
+            this.playbackService = ContainerLocator.Current.Resolve<IPlaybackService>();
+            this.shellService = ContainerLocator.Current.Resolve<IShellService>();
 
             this.playbackService.PlaybackSuccess += (_, __) => this.TryRegisterSpectrumPlayers();
             this.shellService.WindowStateChanged += (_, __) => this.TryRegisterSpectrumPlayers();

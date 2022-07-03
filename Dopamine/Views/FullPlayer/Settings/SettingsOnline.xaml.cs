@@ -1,5 +1,5 @@
 ﻿using Dopamine.Services.Scrobbling;
-using CommonServiceLocator;
+using Prism.Ioc;
 using System.Windows.Controls;
 
 namespace Dopamine.Views.FullPlayer.Settings
@@ -12,7 +12,7 @@ namespace Dopamine.Views.FullPlayer.Settings
         {
             InitializeComponent();
 
-            this.scrobblingService = ServiceLocator.Current.GetInstance<IScrobblingService>();
+            this.scrobblingService = ContainerLocator.Current.Resolve<IScrobblingService>();
             this.scrobblingService.SignInStateChanged += (_) => this.PasswordBox.Password = scrobblingService.Password;
             this.PasswordBox.Password = scrobblingService.Password;
         }

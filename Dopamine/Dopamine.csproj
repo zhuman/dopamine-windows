@@ -30,6 +30,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <EnableDefaultItems>false</EnableDefaultItems>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -76,10 +77,6 @@
     <Reference Include="Digimezzo.Foundation.WPF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Digimezzo.Foundation.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\taglib-sharp.dll</HintPath>
     </Reference>
     <Reference Include="WPFFolderBrowser, Version=1.0.2.0, Culture=neutral, PublicKeyToken=6437333e9e99153e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -780,11 +777,7 @@
     <Content Include="Libraries\CSCore.Ffmpeg.dll" />
     <Content Include="Libraries\Digimezzo.Foundation.Core.dll" />
     <Content Include="Libraries\Digimezzo.Foundation.WPF.dll" />
-    <Content Include="Libraries\GongSolutions.WPF.DragDrop.dll" />
     <Content Include="Libraries\Ionic.Zip.dll" />
-    <Content Include="Libraries\NVorbis.dll" />
-    <Content Include="Libraries\System.Windows.Interactivity.dll" />
-    <Content Include="Libraries\taglib-sharp.dll" />
     <Content Include="Libraries\WPFFolderBrowser.dll" />
     <Content Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1403,14 +1396,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommonServiceLocator">
-      <Version>2.0.6</Version>
-    </PackageReference>
     <PackageReference Include="DiscordRichPresence">
       <Version>1.0.175</Version>
     </PackageReference>
     <PackageReference Include="DryIoc.dll">
-      <Version>5.1.0</Version>
+      <Version>4.8.8</Version>
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop">
       <Version>3.1.1</Version>
@@ -1431,5 +1421,6 @@
     </PackageReference>
     <PackageReference Include="CoreWCF.Http" Version="1.1.0" />
     <PackageReference Include="CoreWCF.Primitives" Version="1.1.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
   </ItemGroup>
 </Project>

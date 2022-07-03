@@ -1,5 +1,4 @@
-﻿using CommonServiceLocator;
-using Digimezzo.Foundation.Core.IO;
+﻿using Digimezzo.Foundation.Core.IO;
 using Digimezzo.Foundation.Core.Logging;
 using Digimezzo.Foundation.Core.Settings;
 using Digimezzo.Foundation.Core.Utils;
@@ -165,7 +164,7 @@ namespace Dopamine
 
         protected void InitializeWcfServices()
         {
-            // CommandService
+            /*// CommandService
             // --------------
             var commandServicehost = new ServiceHost(Container.Resolve<ICommandService>(), new Uri[] { new Uri(string.Format("net.pipe://localhost/{0}/CommandService", ProductInformation.ApplicationName)) });
             commandServicehost.AddServiceEndpoint(typeof(ICommandService), new StrongNetNamedPipeBinding(), "CommandServiceEndpoint");
@@ -193,7 +192,7 @@ namespace Dopamine
             catch (Exception ex)
             {
                 LogClient.Error("Could not start FileService. Exception: {0}", ex.Message);
-            }
+            }*/
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -303,7 +302,7 @@ namespace Dopamine
                     SettingsClient.Get<bool>("Appearance", "FollowWindowsColor"),
                     SettingsClient.Get<bool>("Appearance", "FollowAlbumCoverColor")
                 );
-                Container.Resolve<IExternalControlService>();
+                //Container.Resolve<IExternalControlService>();
                 Container.Resolve<IRichPresenceService>();
             }
 
@@ -416,7 +415,7 @@ namespace Dopamine
 
         private void TryShowRunningInstance()
         {
-            var commandServiceFactory = new ChannelFactory<ICommandService>(new StrongNetNamedPipeBinding(), new EndpointAddress(string.Format("net.pipe://localhost/{0}/CommandService/CommandServiceEndpoint", ProductInformation.ApplicationName)));
+            /*var commandServiceFactory = new ChannelFactory<ICommandService>(new StrongNetNamedPipeBinding(), new EndpointAddress(string.Format("net.pipe://localhost/{0}/CommandService/CommandServiceEndpoint", ProductInformation.ApplicationName)));
 
             try
             {
@@ -427,12 +426,12 @@ namespace Dopamine
             catch (Exception ex)
             {
                 LogClient.Error("A problem occurred while trying to show the running instance. Exception: {0}", ex.Message);
-            }
+            }*/
         }
 
         private void TrySendCommandlineArguments(string[] args)
         {
-            LogClient.Info("Trying to send {0} command-line arguments to the running instance", args.Count());
+            /*LogClient.Info("Trying to send {0} command-line arguments to the running instance", args.Count());
 
             var needsSending = true;
             var startTime = DateTime.Now;
@@ -476,7 +475,7 @@ namespace Dopamine
                 {
                     needsSending = false;
                 }
-            }
+            }*/
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -565,7 +564,7 @@ namespace Dopamine
             LogClient.Info("### FORCED STOP of {0}, version {1} ###", ProductInformation.ApplicationName, ProcessExecutable.AssemblyVersion());
 
             // Stop playing (This avoids remaining processes in Task Manager)
-            var playbackService = ServiceLocator.Current.GetInstance<IPlaybackService>();
+            var playbackService = ContainerLocator.Current.Resolve<IPlaybackService>();
             playbackService.Stop();
 
             // Emergency save of the settings

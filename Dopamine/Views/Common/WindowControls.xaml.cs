@@ -1,4 +1,4 @@
-﻿using CommonServiceLocator;
+﻿using Prism.Ioc;
 using Dopamine.Services.Shell;
 using System;
 using System.Windows;
@@ -54,7 +54,7 @@ namespace Dopamine.Views.Common
         {
             InitializeComponent();
 
-            this.shellService = ServiceLocator.Current.GetInstance<IShellService>();
+            this.shellService = ContainerLocator.Current.Resolve<IShellService>();
         }
 
         public override void OnApplyTemplate()

@@ -239,9 +239,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommonServiceLocator">
-      <Version>2.0.6</Version>
-    </PackageReference>
     <PackageReference Include="DiscordRichPresence">
       <Version>1.0.175</Version>
     </PackageReference>

@@ -1,12 +1,12 @@
 ﻿using Dopamine.ViewModels;
 using Dopamine.Services.Playback;
-using CommonServiceLocator;
+using Prism.Ioc;
 
 namespace Dopamine.ViewModels.Common
 {
     public class PopupVolumeControlsViewModel : VolumeControlsViewModel
     {
-        public PopupVolumeControlsViewModel() : base(ServiceLocator.Current.GetInstance<IPlaybackService>())
+        public PopupVolumeControlsViewModel() : base(ContainerLocator.Current.Resolve<IPlaybackService>())
         {
         }
     }

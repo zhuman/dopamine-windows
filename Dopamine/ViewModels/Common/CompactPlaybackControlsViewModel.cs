@@ -1,13 +1,13 @@
 ﻿using Dopamine.ViewModels;
 using Dopamine.Services.Playback;
-using CommonServiceLocator;
 using Prism.Events;
+using Prism.Ioc;
 
 namespace Dopamine.ViewModels.Common
 {
     public class CompactPlaybackControlsViewModel : PlaybackControlsViewModel
     {
-        public CompactPlaybackControlsViewModel() : base(ServiceLocator.Current.GetInstance<IPlaybackService>(), ServiceLocator.Current.GetInstance<IEventAggregator>())
+        public CompactPlaybackControlsViewModel() : base(ContainerLocator.Current.Resolve<IPlaybackService>(), ContainerLocator.Current.Resolve<IEventAggregator>())
         {
         }
     }

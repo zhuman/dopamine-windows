@@ -1,10 +1,10 @@
 ﻿using Digimezzo.Foundation.Core.Logging;
 using Dopamine.Views.Base;
 using Dopamine.Services.Playback;
-using CommonServiceLocator;
 using System;
 using System.Windows;
 using System.Windows.Input;
+using Prism.Ioc;
 
 namespace Dopamine.Views.Common
 {
@@ -35,7 +35,7 @@ namespace Dopamine.Views.Common
 
             // We need a parameterless constructor to be able to use this UserControl in other UserControls without dependency injection.
             // So for now there is no better solution than to find the EventAggregator by using the ServiceLocator.
-            this.playBackService = ServiceLocator.Current.GetInstance<IPlaybackService>();
+            this.playBackService = ContainerLocator.Current.Resolve<IPlaybackService>();
         }
 
         private void StackPanel_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

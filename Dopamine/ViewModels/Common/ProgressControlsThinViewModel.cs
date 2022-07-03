@@ -1,12 +1,12 @@
 ﻿using Dopamine.Services.Playback;
 using Dopamine.Services.Playback;
-using CommonServiceLocator;
+using Prism.Ioc;
 
 namespace Dopamine.ViewModels.Common
 {
     public class ProgressControlsThinViewModel : ProgressControlsViewModel
     {
-        public ProgressControlsThinViewModel() : base(ServiceLocator.Current.GetInstance<IPlaybackService>())
+        public ProgressControlsThinViewModel() : base(ContainerLocator.Current.Resolve<IPlaybackService>())
         {
         }
     }
