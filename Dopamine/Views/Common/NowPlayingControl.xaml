@@ -7,7 +7,7 @@
                             xmlns:commonviews="clr-namespace:Dopamine.Views.Common"
                             xmlns:baseviews="clr-namespace:Dopamine.Views.Common.Base"
                             xmlns:prismMvvm="clr-namespace:Prism.Mvvm;assembly=Prism.Wpf"
-                            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                             xmlns:dc="clr-namespace:Digimezzo.Foundation.WPF.Controls;assembly=Digimezzo.Foundation.WPF"
                             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                             mc:Ignorable="d"

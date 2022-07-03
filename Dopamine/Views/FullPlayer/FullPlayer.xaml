@@ -9,7 +9,7 @@
              xmlns:cp="clr-namespace:Dopamine.Core.Prism;assembly=Dopamine.Core"
              xmlns:commonviews="clr-namespace:Dopamine.Views.Common"
              xmlns:prismMvvm="clr-namespace:Prism.Mvvm;assembly=Prism.Wpf"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:utils="clr-namespace:Dopamine.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
