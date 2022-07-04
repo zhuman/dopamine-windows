@@ -287,10 +287,13 @@ namespace Dopamine.ViewModels.FullPlayer.Settings
             {
                 SettingsClient.Set("Playback", "EnableExternalControl", value);
                 SetProperty(ref this.checkBoxEnableExternalControlChecked, value);
-                if (value == true)
-                    this.externalControlService.Start();
-                else
-                    this.externalControlService.Stop();
+                if (this.externalControlService != null)
+                {
+                    if (value == true)
+                        this.externalControlService.Start();
+                    else
+                        this.externalControlService.Stop();
+                }
             }
         }
 
@@ -315,13 +318,13 @@ namespace Dopamine.ViewModels.FullPlayer.Settings
             }
         }
 
-        public SettingsPlaybackViewModel(IPlaybackService playbackService, ITaskbarService taskbarService, INotificationService notificationService, IDialogService dialogService, IExternalControlService externalControlService, II18nService i18nService)
+        public SettingsPlaybackViewModel(IPlaybackService playbackService, ITaskbarService taskbarService, INotificationService notificationService, IDialogService dialogService, /*IExternalControlService externalControlService,*/ II18nService i18nService)
         {
             this.playbackService = playbackService;
             this.taskbarService = taskbarService;
             this.notificationService = notificationService;
             this.dialogService = dialogService;
-            this.externalControlService = externalControlService;
+            //this.externalControlService = externalControlService;
             this.i18nService = i18nService;
 
             this.ShowTestNotificationCommand = new DelegateCommand(() => this.notificationService.ShowNotificationAsync());
