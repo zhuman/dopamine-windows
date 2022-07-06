@@ -9,3 +9,6 @@
 [assembly: AssemblyVersion("2.0.9.4000")]
 [assembly: AssemblyFileVersion("2.0.9.4000")]
 [assembly: AssemblyInformationalVersion("2.0.9.4000")]
+
+// Declare the newest supported OS platform
+[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows10.0.22000")]
