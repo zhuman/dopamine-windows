@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Enumeration;
 using System.Linq;
 
 namespace Dopamine.Core.IO
@@ -16,24 +17,15 @@ namespace Dopamine.Core.IO
 
             try
             {
-                var files = new List<string>();
-                var exceptions = new ConcurrentQueue<Exception>();
-
-                TryDirectoryRecursiveGetFiles(directory, files, exceptions);
-
-                foreach (Exception ex in exceptions)
-                {
-                    LogClient.Error("Error occurred while getting files recursively. Exception: {0}", ex.Message);
-                }
-
-                foreach (string file in files)
+                // Use the ultra-optimized EnumerateFiles API
+                foreach (var file in new DirectoryInfo(directory).EnumerateFiles("*", new EnumerationOptions { RecurseSubdirectories = true }))
                 {
                     try
                     {
                         // Only add the file if they have a valid extension
-                        if (validExtensions.Contains(Path.GetExtension(file.ToLower())))
+                        if (validExtensions.Contains(Path.GetExtension(file.Name.ToLower())))
                         {
-                            folderPaths.Add(new FolderPathInfo(folderId, file, FileUtils.DateModifiedTicks(file)));
+                            folderPaths.Add(new FolderPathInfo(folderId, file.FullName, file.LastWriteTime.Ticks));
                         }
                     }
                     catch (Exception ex)
@@ -48,71 +40,6 @@ namespace Dopamine.Core.IO
             }
 
             return folderPaths;
-        }
-
-        private static void TryDirectoryRecursiveGetFiles(string path, List<String> files, ConcurrentQueue<Exception> exceptions)
-        {
-            try
-            {
-                // Process the list of files found in the directory.
-                string[] fileEntries = null;
-
-                try
-                {
-                    fileEntries = Directory.GetFiles(path);
-                }
-                catch (Exception ex)
-                {
-                    exceptions.Enqueue(ex);
-                }
-
-                if (fileEntries != null && fileEntries.Count() > 0)
-                {
-                    foreach (string fileName in fileEntries)
-                    {
-                        try
-                        {
-                            files.Add(fileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            exceptions.Enqueue(ex);
-                        }
-                    }
-                }
-
-                // Recurse into subdirectories of this directory. 
-                string[] subdirectoryEntries = null;
-
-                try
-                {
-                    subdirectoryEntries = Directory.GetDirectories(path);
-                }
-                catch (Exception ex)
-                {
-                    exceptions.Enqueue(ex);
-                }
-
-                if (subdirectoryEntries != null && subdirectoryEntries.Count() > 0)
-                {
-
-                    foreach (string subdirectory in subdirectoryEntries)
-                    {
-                        try
-                        {
-                            TryDirectoryRecursiveGetFiles(subdirectory, files, exceptions);
-                        }
-                        catch (Exception ex)
-                        {
-                            exceptions.Enqueue(ex);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                exceptions.Enqueue(ex);
-            }
         }
 
         public static bool IsDirectoryContentAccessible(string directoryPath)
