@@ -22,6 +22,9 @@ namespace Dopamine.ViewModels.FullPlayer.Collection
             this.InitializeAsync(playlistViewModel);
         }
 
+        public CollectionPlaylistEditorViewModel(IPlaylistService playlistService) : this(playlistService, null)
+        { }
+
         public DelegateCommand AddRuleCommand { get; set; }
 
         public DelegateCommand<SmartPlaylistRuleViewModel> RemoveRuleCommand { get; set; }

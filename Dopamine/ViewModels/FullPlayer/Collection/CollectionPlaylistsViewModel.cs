@@ -415,8 +415,8 @@ namespace Dopamine.ViewModels.FullPlayer.Collection
         private async Task ConfirmCreateNewPlaylistAsync()
         {
             CollectionPlaylistEditor view = this.container.Resolve<CollectionPlaylistEditor>();
-            var getCollectionPlaylistEditorViewModel = this.container.Resolve<Func<PlaylistViewModel, CollectionPlaylistEditorViewModel>>();
-            CollectionPlaylistEditorViewModel viewModel = getCollectionPlaylistEditorViewModel(null);
+            var getCollectionPlaylistEditorViewModel = this.container.Resolve<Func<CollectionPlaylistEditorViewModel>>();
+            CollectionPlaylistEditorViewModel viewModel = getCollectionPlaylistEditorViewModel();
             view.DataContext = viewModel;
 
             if (this.dialogService.ShowCustomDialog(
