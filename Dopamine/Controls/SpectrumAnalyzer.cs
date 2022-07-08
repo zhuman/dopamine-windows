@@ -41,12 +41,16 @@ namespace Dopamine.Controls
         private const double minDBValue = -90;
         private const double maxDBValue = 0;
         private const double dbScale = (maxDBValue - minDBValue);
-        private const int defaultRefreshInterval = 25;
+        private const int defaultRefreshInterval = 16;
 
+        private Window topLevelWindow;
+        private bool isWindowActive;
         private readonly DispatcherTimer animationTimer;
         private Canvas spectrumCanvas;
         private ISpectrumPlayer soundPlayer;
-        private readonly List<Shape> barShapes = new List<Shape>();
+        private GeometryDrawing barDrawing;
+        private GeometryGroup barGroup;
+        private readonly List<RectangleGeometry> barShapes = new List<RectangleGeometry>();
         private double[] barHeights;
         private float[] channelData = new float[1024];
         private float[] channelPeakData;
@@ -81,10 +85,7 @@ namespace Dopamine.Controls
 
             if (spectrumAnalyzer.barShapes != null && spectrumAnalyzer.barShapes.Count > 0)
             {
-                foreach (Shape bar in spectrumAnalyzer.barShapes)
-                {
-                    bar.Fill = spectrumAnalyzer.BarBackground;
-                }
+                spectrumAnalyzer.barDrawing.Brush = spectrumAnalyzer.BarBackground;
             }
         }
 
@@ -113,9 +114,10 @@ namespace Dopamine.Controls
 
             if (spectrumAnalyzer.barShapes != null && spectrumAnalyzer.barShapes.Count > 0)
             {
-                foreach (Shape bar in spectrumAnalyzer.barShapes)
+                foreach (var bar in spectrumAnalyzer.barShapes)
                 {
-                    bar.Width = spectrumAnalyzer.BarWidth;
+                    var origRect = bar.Rect;
+                    bar.Rect = new Rect(origRect.X, origRect.Y, spectrumAnalyzer.BarWidth, origRect.Height);
                 }
             }
         }
@@ -254,12 +256,15 @@ namespace Dopamine.Controls
 
         public SpectrumAnalyzer()
         {
-            this.animationTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle)
+            this.animationTimer = new DispatcherTimer(DispatcherPriority.Render)
             {
                 Interval = TimeSpan.FromMilliseconds(defaultRefreshInterval)
             };
 
             this.animationTimer.Tick += animationTimer_Tick;
+
+            this.Loaded += SpectrumAnalyzer_Loaded;
+            this.Unloaded += SpectrumAnalyzer_Unloaded;
         }
 
         public override void OnApplyTemplate()
@@ -296,7 +301,9 @@ namespace Dopamine.Controls
             this.soundPlayer = soundPlayer;
             this.soundPlayer.PropertyChanged += soundPlayer_PropertyChanged;
             this.UpdateBarLayout();
-            this.animationTimer.Start();
+
+            if (isWindowActive)
+                this.animationTimer.Start();
         }
 
         public void UnregisterSoundPlayer()
@@ -336,6 +343,7 @@ namespace Dopamine.Controls
                 double peakYPos = 0f;
                 double height = spectrumCanvas.RenderSize.Height;
                 int barIndex = 0;
+                double barWidth = this.BarWidth;
 
                 for (int i = this.minimumFrequencyIndex; i <= this.maximumFrequencyIndex; i++)
                 {
@@ -393,17 +401,15 @@ namespace Dopamine.Controls
                             this.channelPeakData[barIndex] = (float)(peakYPos + (this.peakFallDelay * this.channelPeakData[barIndex])) / ((float)(this.peakFallDelay + 1));
                         }
 
-                        double xCoord = this.BarSpacing + (this.BarWidth * barIndex) + (this.BarSpacing * barIndex) + 1;
+                        double xCoord = this.BarSpacing + (barWidth * barIndex) + (this.BarSpacing * barIndex) + 1;
 
                         switch (this.AnimationStyle)
                         {
                             case SpectrumAnimationStyle.Nervous:
-                                this.barShapes[barIndex].Margin = new Thickness(xCoord, (height - 1) - barHeight, 0, 0);
-                                this.barShapes[barIndex].Height = barHeight;
+                                this.barShapes[barIndex].Rect = new Rect(xCoord, (height - 1) - barHeight, barWidth, barHeight);
                                 break;
                             case SpectrumAnimationStyle.Gentle:
-                                this.barShapes[barIndex].Margin = new Thickness(xCoord, (height - 1) - this.channelPeakData[barIndex], 0, 0);
-                                this.barShapes[barIndex].Height = this.channelPeakData[barIndex];
+                                this.barShapes[barIndex].Rect = new Rect(xCoord, (height - 1) - this.channelPeakData[barIndex], barWidth, this.channelPeakData[barIndex]);
                                 break;
                             default:
                                 break;
@@ -479,21 +485,26 @@ namespace Dopamine.Controls
 
             double height = this.spectrumCanvas.RenderSize.Height;
 
+            barGroup = new GeometryGroup();
+            barDrawing = new GeometryDrawing(this.BarBackground, null, barGroup);
+
             for (int i = 0; i < actualBarCount; i++)
             {
                 double xCoord = this.BarSpacing + (this.BarWidth * i) + (this.BarSpacing * i) + 1;
-                Rectangle barRectangle = new Rectangle()
-                {
-                    Margin = new Thickness(xCoord, height, 0, 0),
-                    Width = this.BarWidth,
-                    Height = 0,
-                    Fill = this.BarBackground
-                };
+                var barRectangle = new RectangleGeometry(new Rect(xCoord, height, this.BarWidth, 0));
 
+                barGroup.Children.Add(barRectangle);
                 this.barShapes.Add(barRectangle);
             }
 
-            foreach (Shape shape in barShapes) this.spectrumCanvas.Children.Add(shape);
+            this.spectrumCanvas.Children.Add(new Image() {
+                Source = new DrawingImage(barDrawing),
+                Stretch = Stretch.None,
+                Width = this.spectrumCanvas.RenderSize.Width,
+                Height = this.spectrumCanvas.RenderSize.Height,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                HorizontalAlignment = HorizontalAlignment.Left
+            });
         }
 
         private void soundPlayer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -501,7 +512,7 @@ namespace Dopamine.Controls
             switch (e.PropertyName)
             {
                 case "IsPlaying":
-                    if (this.soundPlayer.IsPlaying && !this.animationTimer.IsEnabled)
+                    if (this.soundPlayer.IsPlaying && !this.animationTimer.IsEnabled && isWindowActive)
                     {
                         this.animationTimer.Start();
                     }
@@ -517,6 +528,54 @@ namespace Dopamine.Controls
         private void spectrumCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.UpdateBarLayout();
+        }
+
+        private void SpectrumAnalyzer_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (topLevelWindow != null)
+            {
+                topLevelWindow.StateChanged -= TopLevelWindow_StateChanged;
+                isWindowActive = false;
+            }
+
+            topLevelWindow = Window.GetWindow(this.VisualParent);
+
+            if (topLevelWindow != null)
+            {
+                topLevelWindow.StateChanged += TopLevelWindow_StateChanged;
+                isWindowActive = topLevelWindow.WindowState != WindowState.Minimized;
+            }
+
+            if (isWindowActive && (this.soundPlayer?.IsPlaying ?? false))
+            {
+                this.animationTimer.Start();
+            }
+        }
+
+        private void SpectrumAnalyzer_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.animationTimer.Stop();
+
+            if (topLevelWindow != null)
+            {
+                topLevelWindow.StateChanged -= TopLevelWindow_StateChanged;
+                isWindowActive = false;
+            }
+            topLevelWindow = null;
+        }
+
+        private void TopLevelWindow_StateChanged(object sender, EventArgs e)
+        {
+            isWindowActive = topLevelWindow?.WindowState != WindowState.Minimized;
+
+            if (!isWindowActive)
+            {
+                this.animationTimer.Stop();
+            }
+            else if (this.soundPlayer?.IsPlaying ?? false)
+            {
+                this.animationTimer.Start();
+            }
         }
     }
 }
