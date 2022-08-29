@@ -28,7 +28,7 @@ namespace Dopamine.ViewModels.FullPlayer.Settings
         private ITaskbarService taskbarService;
         private INotificationService notificationService;
         private IDialogService dialogService;
-        private IExternalControlService externalControlService;
+        //private IExternalControlService externalControlService;
         private II18nService i18nService;
         private bool checkBoxUseAllAvailableChannelsChecked;
         private bool checkBoxWasapiExclusiveModeChecked;
@@ -287,13 +287,13 @@ namespace Dopamine.ViewModels.FullPlayer.Settings
             {
                 SettingsClient.Set("Playback", "EnableExternalControl", value);
                 SetProperty(ref this.checkBoxEnableExternalControlChecked, value);
-                if (this.externalControlService != null)
+                /*if (this.externalControlService != null)
                 {
                     if (value == true)
                         this.externalControlService.Start();
                     else
                         this.externalControlService.Stop();
-                }
+                }*/
             }
         }
 
